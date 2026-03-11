@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - المكتبة العامة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            padding-top: 0;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .auth-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+        }
+        .auth-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid #374151;
+        }
+        .auth-card h1 {
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-radius: 50px;
+            background: #1e293b;
+            padding: 0.3rem;
+        }
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.6rem;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        .auth-tab.active {
+            background: var(--accent);
+            color: white;
+        }
+        .auth-form {
+            display: none;
+        }
+        .auth-form.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 12px;
+            background: #1e293b;
+            color: white;
+            font-family: inherit;
+            border: 1px solid #374151;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .auth-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .auth-btn:hover {
+            background: var(--accent-hover);
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        .back-link:hover {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1><i class="fas fa-book-open"></i> المكتبة العامة</h1>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchTab('login')">تسجيل الدخول</div>
+                <div class="auth-tab" onclick="switchTab('signup')">إنشاء حساب</div>
+            </div>
+
+            <!-- نموذج تسجيل الدخول -->
+            <div id="login-form" class="auth-form active">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">دخول</button>
+                    <div id="login-error" class="error-message"></div>
+                </form>
+            </div>
+
+            <!-- نموذج إنشاء حساب -->
+            <div id="signup-form" class="auth-form">
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label>الاسم</label>
+                        <input type="text" id="signup-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="signup-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" id="signup-password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">إنشاء حساب</button>
+                    <div id="signup-error" class="error-message"></div>
+                </form>
+            </div>
+
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-right"></i> العودة للمكتبة</a>
+        </div>
+    </div>
+
+    <script>
+        // التبديل بين التبويبات
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelector('.auth-tab').classList.add('active');
+                document.getElementById('login-form').classList.add('active');
+            } else {
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('signup-form').classList.add('active');
+            }
+        }
+
+        // معالج تسجيل الدخول
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                window.location.href = 'index.html';
+            } else {
+                document.getElementById('login-error').innerText = 'البريد أو كلمة المرور غير صحيحة';
+            }
+        }
+
+        // معالج إنشاء حساب
+        function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            if (users.find(u => u.email === email)) {
+                document.getElementById('signup-error').innerText = 'البريد الإلكتروني مستخدم بالفعل';
+                return;
+            }
+
+            const newUser = {
+                id: Date.now().toString(),
+                name,
+                email,
+                password,
+                avatar: "https://via.placeholder.com/32x32?text=User",
+                createdAt: new Date().toISOString(),
+                preferences: {
+                    favoriteSubjects: [],
+                    fontSize: "medium",
+                    darkMode: false,
+                    readingGoal: 0
+                },
+                stats: {
+                    booksRead: 0,
+                    favoriteBooks: [],
+                    currentlyReading: [],
+                    recentlyViewed: []
+                }
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            window.location.href = 'index.html';
+        }
+
+        // التحقق من وجود signup=true في الرابط لتفعيل تبويب إنشاء الحساب
+        if (window.location.search.includes('signup=true')) {
+            switchTab('signup');
+        }
+    </script>
+</body>
+</html>
