@@ -1,9 +1,8 @@
+index.html
+style.css
+script.js
+login.htm
+profile.html
+admin.html
+admin.js
 
-├── index.html
-├── style.css
-├── script.js
-├── login.html
-├── profile.html
-├── admin.html
-├── admin.js
-└── 
